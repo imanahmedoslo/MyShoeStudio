@@ -1,0 +1,29 @@
+﻿namespace MyShoeStudio.Data.Models
+{
+    public enum eCategory
+    {
+        Sneakers,
+        Boots,
+        Sandals,
+        Slippers,
+        DressShoes,
+        CasualShoes,
+        highHeels,
+        RunningShoes,
+        WalkingShoes,
+        HikingShoes,
+        ClimbingShoes,
+        CyclingShoes,
+        SkateboardingShoes,
+        GolfShoes,
+        BasketballShoes,
+        TennisShoes,
+        SoccerShoes,
+        BaseballShoes,
+        FootballShoes,
+        female,
+        male,
+        kids,
+        unisex,
+    }
+}
