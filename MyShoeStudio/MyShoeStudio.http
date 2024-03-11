@@ -1,0 +1,6 @@
+@MyShoeStudio_HostAddress = http://localhost:5034
+
+GET {{MyShoeStudio_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
