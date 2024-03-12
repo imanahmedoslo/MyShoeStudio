@@ -27,7 +27,7 @@ namespace MyShoeStudio.Data.Models
         public string City { get; set; } = string.Empty;
 
         public string PaymentInfo { get; set; }=string.Empty;
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         public User User { get; set; }
 

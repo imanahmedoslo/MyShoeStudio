@@ -1,74 +1,88 @@
-using System.Text.Json.Serialization;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MyShoeStudio.Data;
-using System.Text;
-
+using MyShoeStudio.Data.Models;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configuration for JWT
 var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
 var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
 
+// Add services to the container.
+builder.Services.AddDbContext<MyShoeStudioDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Adding Identity
+builder.Services.AddIdentity<User, IdentityRole>(options => {
+    // Identity options configuration
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<MyShoeStudioDbContext>()
+.AddDefaultTokenProviders();
+
+// Configure JWT Authentication
+builder.Services.AddAuthentication(options => {
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options => {
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+});
+
+// Adding CORS
 builder.Services.AddCors();
+
+// Adding controllers and JSON options
 builder.Services.AddControllers().AddJsonOptions(c =>
 {
     c.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-       .AddJwtBearer(options => {
-           options.TokenValidationParameters = new TokenValidationParameters
-           {
-               ValidateIssuer = true,
-               ValidateAudience = true,
-               ValidateLifetime = true,
-               ValidateIssuerSigningKey = true,
-               ValidIssuer = jwtIssuer,
-               ValidAudience = jwtIssuer,
-               IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!))
-           };
-       });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddDbContext<MyShoeStudioDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Middleware configuration
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseHttpsRedirection();
-app.UseCors(c => {
-    c
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowAnyOrigin();
+
+app.UseCors(c =>
+{
+    c.AllowAnyHeader()
+     .AllowAnyMethod()
+     .AllowAnyOrigin();
 });
 
-app.UseHttpsRedirection();
-
+app.UseAuthentication(); // Make sure to call this before UseAuthorization
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

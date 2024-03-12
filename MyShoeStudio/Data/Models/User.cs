@@ -1,12 +1,13 @@
-﻿namespace MyShoeStudio.Data.Models
+﻿using Microsoft.AspNetCore.Identity;
+namespace MyShoeStudio.Data.Models
 {
-    public class User
+    public class User:IdentityUser
     {
-        public int Id { get; set; }
-        public string Email { get; set; }=string.Empty;
-        public string Password { get; set; } = string.Empty;
+       
+       
+       
         public bool IsAdmin { get; set; }=false;
-        public string UserName { get; set; } = string.Empty;
+       
 
         // Navigation properties
         public virtual ICollection<ShoppingList> ShoppingLists { get; set; }
