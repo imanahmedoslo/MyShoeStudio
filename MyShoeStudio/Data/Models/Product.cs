@@ -8,14 +8,13 @@
         public int Price { get; set; }
         public string Brand { get; set; } = string.Empty;
         public string CountryOfOrigin { get; set; } = string.Empty;
-        public string Size { get; set; } = string.Empty;
         public ICollection <eCategory> Categories { get; set; }=new List<eCategory>();
 
-       
-        public int InventoryId { get; set; }
 
-       
-        public virtual Inventory Inventory { get; set; }
+        public virtual ICollection<ProductInventory> ProductInventories { get; set; }
+
+
+
         public virtual ICollection<Product_ShoppingList> ShoppingLists { get; set; }
         public virtual ICollection<Product_Wishlist> Wishlists { get; set; }
     }

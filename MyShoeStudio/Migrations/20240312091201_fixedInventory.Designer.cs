@@ -12,8 +12,8 @@ using MyShoeStudio.Data;
 namespace MyShoeStudio.Migrations
 {
     [DbContext(typeof(MyShoeStudioDbContext))]
-    [Migration("20240311193254_initial-second")]
-    partial class initialsecond
+    [Migration("20240312091201_fixedInventory")]
+    partial class fixedInventory
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,26 +24,6 @@ namespace MyShoeStudio.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("MyShoeStudio.Data.Models.Inventory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductInfo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Inventories");
-                });
 
             modelBuilder.Entity("MyShoeStudio.Data.Models.PersonalInfo", b =>
                 {
@@ -116,15 +96,8 @@ namespace MyShoeStudio.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("InventoryId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Price")
                         .HasColumnType("int");
-
-                    b.Property<string>("Size")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -132,10 +105,33 @@ namespace MyShoeStudio.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InventoryId")
-                        .IsUnique();
-
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("MyShoeStudio.Data.Models.ProductInventory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SizeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeId");
+
+                    b.ToTable("ProductInventory");
                 });
 
             modelBuilder.Entity("MyShoeStudio.Data.Models.Product_ShoppingList", b =>
@@ -211,6 +207,22 @@ namespace MyShoeStudio.Migrations
                     b.ToTable("ShoppingLists");
                 });
 
+            modelBuilder.Entity("MyShoeStudio.Data.Models.Size", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("SizeValue")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sizes");
+                });
+
             modelBuilder.Entity("MyShoeStudio.Data.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -271,15 +283,23 @@ namespace MyShoeStudio.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MyShoeStudio.Data.Models.Product", b =>
+            modelBuilder.Entity("MyShoeStudio.Data.Models.ProductInventory", b =>
                 {
-                    b.HasOne("MyShoeStudio.Data.Models.Inventory", "Inventory")
-                        .WithOne("Product")
-                        .HasForeignKey("MyShoeStudio.Data.Models.Product", "InventoryId")
+                    b.HasOne("MyShoeStudio.Data.Models.Product", "Product")
+                        .WithMany("ProductInventories")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Inventory");
+                    b.HasOne("MyShoeStudio.Data.Models.Size", "Size")
+                        .WithMany("ProductSizeInventories")
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Size");
                 });
 
             modelBuilder.Entity("MyShoeStudio.Data.Models.Product_ShoppingList", b =>
@@ -342,14 +362,10 @@ namespace MyShoeStudio.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MyShoeStudio.Data.Models.Inventory", b =>
-                {
-                    b.Navigation("Product")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("MyShoeStudio.Data.Models.Product", b =>
                 {
+                    b.Navigation("ProductInventories");
+
                     b.Navigation("ShoppingLists");
 
                     b.Navigation("Wishlists");
@@ -358,6 +374,11 @@ namespace MyShoeStudio.Migrations
             modelBuilder.Entity("MyShoeStudio.Data.Models.ShoppingList", b =>
                 {
                     b.Navigation("ProductPaths");
+                });
+
+            modelBuilder.Entity("MyShoeStudio.Data.Models.Size", b =>
+                {
+                    b.Navigation("ProductSizeInventories");
                 });
 
             modelBuilder.Entity("MyShoeStudio.Data.Models.User", b =>
