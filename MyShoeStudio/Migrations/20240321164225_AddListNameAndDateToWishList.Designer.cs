@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyShoeStudio.Data;
 
@@ -11,9 +12,11 @@ using MyShoeStudio.Data;
 namespace MyShoeStudio.Migrations
 {
     [DbContext(typeof(MyShoeStudioDbContext))]
-    partial class MyShoeStudioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240321164225_AddListNameAndDateToWishList")]
+    partial class AddListNameAndDateToWishList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -295,7 +298,7 @@ namespace MyShoeStudio.Migrations
 
                     b.Property<string>("ListName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TotalPrice")
                         .HasColumnType("int");
@@ -310,9 +313,6 @@ namespace MyShoeStudio.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("UserId1");
-
-                    b.HasIndex("ListName", "Id")
-                        .IsUnique();
 
                     b.ToTable("Wishlists");
                 });

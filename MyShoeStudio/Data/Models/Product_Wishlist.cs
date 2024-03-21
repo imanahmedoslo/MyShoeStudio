@@ -7,7 +7,7 @@
         public int WishlistId { get; set; }
 
         // Navigation properties
-        public virtual Product Product { get; set; }
-        public virtual Wishlist Wishlist { get; set; }
+        public virtual Product Product { get; set; } = new Product();
+        public virtual Wishlist Wishlist { get; set; } = new Wishlist();
     }
 }

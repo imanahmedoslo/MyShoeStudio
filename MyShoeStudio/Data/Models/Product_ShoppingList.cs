@@ -8,7 +8,7 @@
         public int Amount { get; set; }
 
         // Navigation properties
-        public virtual Product Product { get; set; }
-        public virtual ShoppingList ShoppingList { get; set; }
+        public virtual Product Product { get; set; } = new Product();
+        public virtual ShoppingList ShoppingList { get; set; }= new ShoppingList();
     }
 }
