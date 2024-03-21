@@ -34,18 +34,26 @@ namespace MyShoeStudio.Controllers
         }
         [Authorize(Roles = "Admin,User")]
         [HttpPut("updateShoppingList")]
-        public async Task<IActionResult> UpdateShoppingList([FromBody] ShoppingList shoppingList)
+        public async Task<IActionResult> UpdateShoppingList([FromBody] Product_ShoppingList updates)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            ShoppingList newShoppingList = new ShoppingList()
+            Product_ShoppingList? productPath= _context.Product_ShoppingLists.FirstOrDefault(x => x.ProductId == updates.ProductId&& x.ShoppingListId==updates.ShoppingListId);
+            if(productPath == null)
             {
-                TotalPrice = shoppingList.TotalPrice,
-                Date = shoppingList.Date,
-            };
-            _context.ShoppingLists.Update(newShoppingList);
+                return NotFound(new { message = "Product path not found" });
+            }
+            if(updates.Amount == 0)
+            {
+                _context.Product_ShoppingLists.Remove(productPath);
+              await  _context.SaveChangesAsync();
+                return Ok(new { message = "Product path removed successfully" });
+            }
+            productPath.Amount = updates.Amount;
+            _context.Product_ShoppingLists.Update(productPath);
+            await _context.SaveChangesAsync();
             return Ok(new { message = "Shopping list updated successfully" });
         }
         [Authorize(Roles = "Admin,User")]
@@ -129,8 +137,20 @@ namespace MyShoeStudio.Controllers
             _context.ShoppingLists.Update(shoppingList);
             return Ok(new { message = "Shopping list purchased successfully" });
         }
-
+        [Authorize(Roles = "Admin,User")]
+        [HttpPost("addProductToShoppingList")]
+        public async Task<IActionResult> AddProductToShoppingList([FromBody] Product_ShoppingList productPath)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            await _context.Product_ShoppingLists.AddAsync(productPath);
+            return Ok(new { message = "Product path added successfully" });
+        }
     }
 }
+
+
 
 
