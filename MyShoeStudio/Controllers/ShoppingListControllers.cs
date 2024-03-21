@@ -16,7 +16,7 @@ namespace MyShoeStudio.Controllers
         }
         [Authorize (Roles="Admin,User")]
         [HttpPost("addShoppingList")]
-        public async Task<IActionResult> AddShoppingList([FromBody] ShoppingList shoppingList)
+        public async Task<IActionResult> AddShoppingList([FromBody] CreateShoppingList shoppingList)
         {
             if (!ModelState.IsValid)
             {
@@ -34,7 +34,7 @@ namespace MyShoeStudio.Controllers
         }
         [Authorize(Roles = "Admin,User")]
         [HttpPut("updateShoppingList")]
-        public async Task<IActionResult> UpdateShoppingList([FromBody] Product_ShoppingList updates)
+        public async Task<IActionResult> UpdateShoppingList([FromBody] CreateProduct_ShoppingList updates)
         {
             if (!ModelState.IsValid)
             {
@@ -57,7 +57,7 @@ namespace MyShoeStudio.Controllers
             return Ok(new { message = "Shopping list updated successfully" });
         }
         [Authorize(Roles = "Admin,User")]
-        [HttpDelete("deleteShoppingList")]
+        [HttpDelete("deleteShoppingList/{id}")]
         public async Task<IActionResult> DeleteShoppingList(int id)
         {
             if (!ModelState.IsValid)
@@ -74,7 +74,7 @@ namespace MyShoeStudio.Controllers
             return Ok(new { message = "Shopping list deleted successfully" });
         }
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("getShoppingList")]
+        [HttpGet("getShoppingList/{id}")]
         public async Task<IActionResult> GetShoppingList(int id)
         {
             if (!ModelState.IsValid)
@@ -89,7 +89,7 @@ namespace MyShoeStudio.Controllers
             return Ok(shoppingList);
         }
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("getAllShoppingListByUserId")]
+        [HttpGet("getAllShoppingListByUserId/{userId}")]
         public async Task<IActionResult> GetAllShoppingListByUserId(string userId)
         {
             if (!ModelState.IsValid)
@@ -106,7 +106,7 @@ namespace MyShoeStudio.Controllers
             return Ok(shoppingList);
         }
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("getAllShoppingHistory")]
+        [HttpGet("getAllShoppingHistory/{userId}")]
         public async Task<IActionResult> GetAllShoppingHistory(string userId)
         {
             if (!ModelState.IsValid)
@@ -121,7 +121,7 @@ namespace MyShoeStudio.Controllers
             return Ok(shoppingList);
         }
         [Authorize(Roles = "Admin,User")]
-        [HttpPut("purchaseShoppingList")]
+        [HttpPut("purchaseShoppingList/{id}")]
         public async Task<IActionResult> PurchaseShoppingList(int id)
         {
             if (!ModelState.IsValid)
@@ -139,16 +139,37 @@ namespace MyShoeStudio.Controllers
         }
         [Authorize(Roles = "Admin,User")]
         [HttpPost("addProductToShoppingList")]
-        public async Task<IActionResult> AddProductToShoppingList([FromBody] Product_ShoppingList productPath)
+        public async Task<IActionResult> AddProductToShoppingList([FromBody] CreateProduct_ShoppingList productPath)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            await _context.Product_ShoppingLists.AddAsync(productPath);
+            Product_ShoppingList newProductPath = new Product_ShoppingList()
+            {
+                ProductId = productPath.ProductId,
+                ShoppingListId = productPath.ShoppingListId,
+                Amount = productPath.Amount
+            };
+            await _context.Product_ShoppingLists.AddAsync(newProductPath);
             return Ok(new { message = "Product path added successfully" });
         }
     }
+}
+public class CreateShoppingList
+{
+    public int Id { get; set; }
+    public int TotalPrice { get; set; }
+    public DateTime Date { get; set; }
+    public bool IsPurchased { get; set; }
+    public int UserId { get; set; }
+
+}
+public class CreateProduct_ShoppingList
+{
+    public int ProductId { get; set; }
+    public int ShoppingListId { get; set; }
+    public int Amount { get; set; }
 }
 
 

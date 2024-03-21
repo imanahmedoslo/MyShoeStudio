@@ -33,8 +33,8 @@ namespace MyShoeStudio.Controllers
             return Ok(new { message = "Product added to wish list successfully" });
         }
         [Authorize(Roles = "User, Admin")]
-        [HttpDelete("DeleteWishList")]
-        public async Task<IActionResult> DeleteWishList([FromBody]int Id)
+        [HttpDelete("DeleteWishList/{id}")]
+        public async Task<IActionResult> DeleteWishList(int Id)
         {
             if (!ModelState.IsValid)
             {
@@ -86,19 +86,19 @@ namespace MyShoeStudio.Controllers
             return Ok(new { message = "Product added to wish list successfully" });
         }
         [Authorize(Roles="User,Admin")]
-        [HttpDelete("RemoveProductFromWishList/{id}")]
-        public async Task<IActionResult> RemoveProductFromWishList( int id)
+        [HttpDelete("RemoveProductFromWishList")]
+        public async Task<IActionResult> RemoveProductFromWishList(DeleteWishList form)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            Wishlist? wishListToRemoveProduct = await _context.Wishlists.FirstOrDefaultAsync(x => x.UserId == id);
+            Wishlist? wishListToRemoveProduct = await _context.Wishlists.FirstOrDefaultAsync(x => x.UserId == form.wishListId);
             if (wishListToRemoveProduct == null)
             {
                 return NotFound(new { message = "Wish list not found" });
             }
-            Product_Wishlist? product_Wishlist = await _context.Product_Wishlists.FirstOrDefaultAsync(x => x.ProductId == id && x.WishlistId == wishListToRemoveProduct.Id);
+            Product_Wishlist? product_Wishlist = await _context.Product_Wishlists.FirstOrDefaultAsync(x => x.ProductId == form.ProductId && x.WishlistId == wishListToRemoveProduct.Id);
             if (product_Wishlist == null)
             {
                 return NotFound(new { message = "Product not found in wish list" });
@@ -108,7 +108,7 @@ namespace MyShoeStudio.Controllers
             return Ok(new { message = "Product removed from wish list successfully" });
         }
         [Authorize(Roles="User,Admin")]
-        [HttpGet("GetWishListsByUserId/")]
+        [HttpGet("GetWishListsByUserId/{userId}")]
         public async Task<IActionResult> GetWishListsByUserId(string userId)
         {
             if (!ModelState.IsValid)
@@ -137,5 +137,10 @@ public class CreateWishList
 public class WishlistName
 {
     public string ListName { get; set; } = string.Empty;
+}
+public class DeleteWishList
+{
+    public int wishListId { get; set; }
+    public int ProductId { get; set; }
 }
 
