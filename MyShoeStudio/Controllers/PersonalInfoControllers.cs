@@ -18,13 +18,25 @@ namespace MyShoeStudio.Controllers
         }
         [Authorize (Roles = "User,Admin")]
         [HttpPost("addPersonalInfo")]
-        public async Task<IActionResult> AddPersonalInfo([FromBody] PersonalInfo personalInfo)
+        public async Task<IActionResult> AddPersonalInfo([FromBody] CreatePersonalInfo personalInfo)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            _context.PersonalInfos.Add(personalInfo);
+            PersonalInfo newPersonalInfo = new PersonalInfo()
+            {
+                FirstName = personalInfo.FirstName,
+                LastName = personalInfo.LastName,
+                PhoneNumber = personalInfo.PhoneNumber,
+                Address = personalInfo.Address,
+                ZipCode = personalInfo.ZipCode,
+                City = personalInfo.City,
+                PaymentInfo = personalInfo.PaymentInfo,
+                UserId = personalInfo.UserId
+            };
+
+            _context.PersonalInfos.Add(newPersonalInfo);
             await _context.SaveChangesAsync();
             return Ok(new { message = "Personal Info added successfully" });
         }
@@ -32,19 +44,35 @@ namespace MyShoeStudio.Controllers
 
         [Authorize(Roles = "User,Admin")]
         [HttpPut("updatePersonalInfo")]
-        public async Task<IActionResult> UpdatePersonalInfo([FromBody] PersonalInfo personalInfo)
+        public async Task<IActionResult> UpdatePersonalInfo([FromBody] CreatePersonalInfo personalInfo)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            _context.PersonalInfos.Update(personalInfo);
+            var personalInfoToUpdate = await _context.PersonalInfos.FirstOrDefaultAsync(x => x.UserId == personalInfo.UserId);
+            if (personalInfoToUpdate == null)
+            {
+                return NotFound();
+            }
+            var newPersonalInfo = new PersonalInfo()
+            {
+                FirstName = personalInfo.FirstName,
+                LastName = personalInfo.LastName,
+                PhoneNumber = personalInfo.PhoneNumber,
+                Address = personalInfo.Address,
+                ZipCode = personalInfo.ZipCode,
+                City = personalInfo.City,
+                PaymentInfo = personalInfo.PaymentInfo,
+                UserId = personalInfo.UserId
+};
+            _context.PersonalInfos.Update(newPersonalInfo);
             await _context.SaveChangesAsync();
             return Ok(new { message = "Personal Info updated successfully" });
         }
 
         [Authorize(Roles = "User,Admin")]
-        [HttpGet("getPersonalInfo")]
+        [HttpGet("getPersonalInfo/{userId}")]
         public async Task<IActionResult> GetPersonalInfo(string userId)
         {
             var personalInfo = await _context.PersonalInfos.FirstOrDefaultAsync(x => x.UserId == userId);
@@ -92,4 +120,28 @@ namespace MyShoeStudio.Controllers
         }
 
     }
+}
+public class CreatePersonalInfo
+{
+    public int Id { get; set; }
+
+
+    public string FirstName { get; set; } = string.Empty;
+
+    public string LastName { get; set; } = string.Empty;
+
+
+    public string PhoneNumber { get; set; } = string.Empty;
+
+
+    public string Address { get; set; } = string.Empty;
+
+
+    public string ZipCode { get; set; } = string.Empty;
+
+
+    public string City { get; set; } = string.Empty;
+
+    public string PaymentInfo { get; set; } = string.Empty;
+    public string UserId { get; set; }
 }

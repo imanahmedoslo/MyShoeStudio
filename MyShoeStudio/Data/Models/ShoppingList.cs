@@ -10,6 +10,6 @@
 
         // Navigation properties
         public virtual User User { get; set; }
-        public virtual ICollection<Product_ShoppingList> ProductPaths { get; set; }
+        public virtual ICollection<Product_ShoppingList> ProductPaths { get; set; } = new List<Product_ShoppingList>();
     }
 }

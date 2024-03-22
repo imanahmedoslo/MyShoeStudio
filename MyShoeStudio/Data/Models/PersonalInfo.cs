@@ -29,7 +29,7 @@ namespace MyShoeStudio.Data.Models
         public string PaymentInfo { get; set; }=string.Empty;
         public string UserId { get; set; }
 
-        public User User { get; set; }
+        public User User { get; set; }=new User();
 
        
     }

@@ -85,7 +85,7 @@ namespace MyShoeStudio.Controllers
             return Ok(new { message = "Product updated successfully" });
         }
 
-        [HttpGet("getProduct")]
+        [HttpGet("getProduct/{productId}")]
         public async Task<IActionResult> GetProduct(int productId)
         {
             var product = await _context.Products.Include(x=>x.ProductInventories).ThenInclude(pI=>pI.Size).FirstOrDefaultAsync(x => x.Id == productId);
@@ -107,7 +107,7 @@ namespace MyShoeStudio.Controllers
             return Ok(products);
         }
         [Authorize(Roles="Admin")]
-        [HttpDelete("deleteProduct")]
+        [HttpDelete("deleteProduct/{productId}")]
         public async Task<IActionResult> DeleteProduct(int productId)
         {
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == productId);
