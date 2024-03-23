@@ -50,7 +50,19 @@ builder.Services.AddAuthentication(options => {
 });
 
 // Adding CORS
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+
+    options.AddPolicy(name: "AllowAll",
+                      policy =>
+                      {
+                          
+                          policy.AllowAnyOrigin()
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                      });
+
+});
 
 // Adding controllers and JSON options
 builder.Services.AddControllers().AddJsonOptions(c =>
@@ -63,7 +75,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
+var key1 = app.Configuration.GetValue<String>("KEY");
 // Middleware configuration
 if (app.Environment.IsDevelopment())
 {
@@ -73,12 +85,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(c =>
-{
-    c.AllowAnyHeader()
-     .AllowAnyMethod()
-     .AllowAnyOrigin();
-});
+app.UseCors("AllowAll");
 
 app.UseAuthentication(); // Make sure to call this before UseAuthorization
 app.UseAuthorization();
@@ -86,3 +93,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+public partial class Program { }

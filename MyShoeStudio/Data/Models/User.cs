@@ -12,7 +12,7 @@ namespace MyShoeStudio.Data.Models
         // Navigation properties
         public virtual ICollection<ShoppingList> ShoppingLists { get; set; }=new List<ShoppingList>();
         public virtual ICollection<Wishlist> Wishlists { get; set; } = new List<Wishlist>();
-        public virtual PersonalInfo PersonalInfo { get; set; } = new PersonalInfo();
+        public virtual PersonalInfo? PersonalInfo { get; set; } 
     }
 }
 

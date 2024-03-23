@@ -13,7 +13,7 @@ namespace MyShoeStudio.Data.Models
         public string ListName { get; set; }=string.Empty;
 
         // Navigation properties
-        public virtual User User { get; set; }=new User();
+        public virtual User? User { get; set; }
         public virtual ICollection<Product_Wishlist> ProductPaths { get; set; }=new List<Product_Wishlist>();
     }
 }
