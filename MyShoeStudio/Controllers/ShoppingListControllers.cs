@@ -30,7 +30,7 @@ namespace MyShoeStudio.Controllers
                 IsPurchased = false,
             };
             await _context.ShoppingLists.AddAsync(newShoppingList);
-            return Ok(new { message = "Shopping list added successfully" });
+            return Ok(newShoppingList);
         }
         [Authorize(Roles = "Admin,User")]
         [HttpPut("updateShoppingList")]
@@ -54,7 +54,7 @@ namespace MyShoeStudio.Controllers
             productPath.Amount = updates.Amount;
             _context.Product_ShoppingLists.Update(productPath);
             await _context.SaveChangesAsync();
-            return Ok(new { message = "Shopping list updated successfully" });
+            return Ok(productPath);
         }
         [Authorize(Roles = "Admin,User")]
         [HttpDelete("deleteShoppingList/{id}")]
@@ -90,7 +90,7 @@ namespace MyShoeStudio.Controllers
         }
         [Authorize(Roles = "Admin,User")]
         [HttpGet("getAllShoppingListByUserId/{userId}")]
-        public async Task<IActionResult> GetAllShoppingListByUserId(string userId)
+        public async Task<IActionResult> GetShoppingListByUserId(string userId)
         {
             if (!ModelState.IsValid)
             {
@@ -107,18 +107,18 @@ namespace MyShoeStudio.Controllers
         }
         [Authorize(Roles = "Admin,User")]
         [HttpGet("getAllShoppingHistory/{userId}")]
-        public async Task<IActionResult> GetAllShoppingHistory(string userId)
+        public async Task<IActionResult> GetAllUserShoppingHistory(string userId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            List<ShoppingList>? shoppingList = await _context.Users.Where(u=>u.Id==userId).SelectMany(u=>u.ShoppingLists).Include(s => s.ProductPaths).ThenInclude(p => p.Product).ToListAsync();
-            if (shoppingList == null)
+            List<ShoppingList>? shoppingLists = await _context.Users.Where(u=>u.Id==userId).SelectMany(u=>u.ShoppingLists).Include(s => s.ProductPaths).ThenInclude(p => p.Product).ToListAsync();
+            if (shoppingLists == null)
             {
                 return NotFound(new { message = "Shopping list not found" });
             }
-            return Ok(shoppingList);
+            return Ok(shoppingLists);
         }
         [Authorize(Roles = "Admin,User")]
         [HttpPut("purchaseShoppingList/{id}")]
@@ -135,7 +135,8 @@ namespace MyShoeStudio.Controllers
             }
             shoppingList.IsPurchased = true;
             _context.ShoppingLists.Update(shoppingList);
-            return Ok(new { message = "Shopping list purchased successfully" });
+            await _context.SaveChangesAsync();
+            return Ok(shoppingList);
         }
         [Authorize(Roles = "Admin,User")]
         [HttpPost("addProductToShoppingList")]
@@ -152,7 +153,7 @@ namespace MyShoeStudio.Controllers
                 Amount = productPath.Amount
             };
             await _context.Product_ShoppingLists.AddAsync(newProductPath);
-            return Ok(new { message = "Product path added successfully" });
+            return Ok(newProductPath);
         }
     }
 }

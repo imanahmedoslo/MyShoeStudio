@@ -38,7 +38,7 @@ namespace MyShoeStudio.Controllers
 
             _context.PersonalInfos.Add(newPersonalInfo);
             await _context.SaveChangesAsync();
-            return Ok(new { message = "Personal Info added successfully" });
+            return Ok(newPersonalInfo);
         }
 
 
@@ -68,7 +68,7 @@ namespace MyShoeStudio.Controllers
 };
             _context.PersonalInfos.Update(newPersonalInfo);
             await _context.SaveChangesAsync();
-            return Ok(new { message = "Personal Info updated successfully" });
+            return Ok(newPersonalInfo);
         }
 
         [Authorize(Roles = "User,Admin")]
