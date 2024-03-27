@@ -8,7 +8,7 @@
         public int Price { get; set; }
         public string Brand { get; set; } = string.Empty;
         public string CountryOfOrigin { get; set; } = string.Empty;
-        public ICollection <eCategory>? Categories { get; set; }
+        public IList <eCategory>? Categories { get; set; }
 
 
         public virtual ICollection<ProductInventory>? ProductInventories { get; set; }

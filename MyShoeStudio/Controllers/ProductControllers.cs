@@ -127,12 +127,12 @@ namespace MyShoeStudio.Controllers
 
 public class CreateProduct
 {
-        public string? Title { get; set; }
+    public string? Title { get; set; }
     public List<string>? Images { get; set; }
     public int Price { get; set; }
     public string? Brand { get; set; }
     public string? CountryOfOrigin { get; set; }
-    public ICollection<eCategory>? Categories { get; set; }
+    public IList<eCategory>? Categories { get; set; }
     public int Amount { get; set; }
     public eSize Size { get; set; }
 }
