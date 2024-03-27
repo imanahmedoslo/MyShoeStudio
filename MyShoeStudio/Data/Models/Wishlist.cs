@@ -14,6 +14,6 @@ namespace MyShoeStudio.Data.Models
 
         // Navigation properties
         public virtual User? User { get; set; }
-        public virtual ICollection<Product_Wishlist> ProductPaths { get; set; }=new List<Product_Wishlist>();
+        public virtual ICollection<Product_Wishlist>? ProductPaths { get; set; }
     }
 }

@@ -7,7 +7,7 @@
             public eSize SizeValue { get; set; }
 
             // Relationship with ProductSizeInventory
-            public virtual ICollection<ProductInventory> ProductSizeInventories { get; set; } = new List<ProductInventory>();
+            public virtual ICollection<ProductInventory>? ProductSizeInventories { get; set; }
         
     }
 }
