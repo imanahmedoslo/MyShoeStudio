@@ -32,6 +32,7 @@ namespace MyShoeStudio.Controllers
                 Title = product.Title
             };
           await  _context.Products.AddAsync(newProduct);
+            await _context.SaveChangesAsync();
             Size? size = new Size() { SizeValue = product.Size };
             bool sizeExists = await _context.Sizes.AnyAsync(x => x.SizeValue == product.Size);
             if (!sizeExists)
@@ -42,9 +43,11 @@ namespace MyShoeStudio.Controllers
             {
                 size = await _context.Sizes.FirstOrDefaultAsync(x => x.SizeValue == product.Size);
             }
+            await _context.SaveChangesAsync();
             ProductInventory productInventory = new ProductInventory() { Quantity = product.Amount, ProductId = newProduct.Id, SizeId = size.Id };
             await _context.ProductInventory.AddAsync(productInventory);
-            return Ok(new { message = "Product added successfully" });
+            await _context.SaveChangesAsync();
+            return Ok(newProduct);
         }
         [Authorize(Roles = "Admin")]
         [HttpPut("updateProduct")]
@@ -124,12 +127,12 @@ namespace MyShoeStudio.Controllers
 
 public class CreateProduct
 {
-        public string Title { get; set; } = string.Empty;
-    public List<string> Images { get; set; } = new List<string>();
+        public string? Title { get; set; }
+    public List<string>? Images { get; set; }
     public int Price { get; set; }
-    public string Brand { get; set; } = string.Empty;
-    public string CountryOfOrigin { get; set; } = string.Empty;
-    public ICollection<eCategory> Categories { get; set; } = new List<eCategory>();
+    public string? Brand { get; set; }
+    public string? CountryOfOrigin { get; set; }
+    public ICollection<eCategory>? Categories { get; set; }
     public int Amount { get; set; }
     public eSize Size { get; set; }
 }
