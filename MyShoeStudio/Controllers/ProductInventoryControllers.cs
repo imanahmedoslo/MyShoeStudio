@@ -59,11 +59,11 @@ namespace MyShoeStudio.Controllers
             await _context.SaveChangesAsync();
             return Ok(new { message = "Product inventory deleted successfully" });
         }
-        [Authorize (Roles = "Admin")]
+       
         [HttpGet("getProductInventory")]
         public async Task<IActionResult> GetProductInventory()
         {
-            List<ProductInventory> productInventory = await _context.ProductInventory.ToListAsync();
+            List<ProductInvetoryObject> productInventory = await _context.ProductInventory.Select(i => new ProductInvetoryObject { Id=i.Id, Quantity=i.Quantity, ProductTitle=i.Product.Title,SizeValue=i.Size.SizeValue.ToString()??"null", ProductId=i.ProductId, SizeId=i.SizeId}).ToListAsync();
             return Ok(productInventory);
         }
     }
@@ -80,5 +80,15 @@ public class  UpdateAmount
 {
   public  int Id { get; set; }
     public int Amount { get; set; }
+
+}
+public class ProductInvetoryObject
+{ 
+    public int Id { get; set; }
+    public int Quantity { get; set; }
+    public string? ProductTitle { get; set; }
+    public string? SizeValue { get; set; }
+    public int ProductId { get; set; }
+    public int SizeId { get; set; }
 
 }

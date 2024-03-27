@@ -30,7 +30,7 @@ namespace MyShoeStudio.Controllers
                 UserId = wishList.UserId
             };
             await _context.Wishlists.AddAsync(newWishList);
-            return Ok(new { message = "Product added to wish list successfully" });
+            return Ok(newWishList);
         }
         [Authorize(Roles = "User, Admin")]
         [HttpDelete("DeleteWishList/{id}")]
@@ -83,7 +83,7 @@ namespace MyShoeStudio.Controllers
                 WishlistId = wishListToAddProduct.Id
             };
             await _context.Product_Wishlists.AddAsync(product_Wishlist);
-            return Ok(new { message = "Product added to wish list successfully" });
+            return Ok(product_Wishlist);
         }
         [Authorize(Roles="User,Admin")]
         [HttpDelete("RemoveProductFromWishList")]
@@ -105,7 +105,7 @@ namespace MyShoeStudio.Controllers
             }
             _context.Product_Wishlists.Remove(product_Wishlist);
             await _context.SaveChangesAsync();
-            return Ok(new { message = "Product removed from wish list successfully" });
+            return Ok(product_Wishlist);
         }
         [Authorize(Roles="User,Admin")]
         [HttpGet("GetWishListsByUserId/{userId}")]

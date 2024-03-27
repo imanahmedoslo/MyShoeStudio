@@ -8,14 +8,13 @@
         public int Price { get; set; }
         public string Brand { get; set; } = string.Empty;
         public string CountryOfOrigin { get; set; } = string.Empty;
-        public ICollection <eCategory> Categories { get; set; }=new List<eCategory>();
+        public IList <eCategory>? Categories { get; set; }
 
 
-        public virtual ICollection<ProductInventory> ProductInventories { get; set; } = new List<ProductInventory>();
+        public virtual ICollection<ProductInventory>? ProductInventories { get; set; }
 
 
-
-        public virtual ICollection<Product_ShoppingList> ShoppingLists { get; set; } = new List<Product_ShoppingList>();
-        public virtual ICollection<Product_Wishlist> Wishlists { get; set; }= new List<Product_Wishlist>();
+        public virtual ICollection<Product_ShoppingList>? ShoppingLists { get; set; }
+        public virtual ICollection<Product_Wishlist>? Wishlists { get; set; }
     }
 }
