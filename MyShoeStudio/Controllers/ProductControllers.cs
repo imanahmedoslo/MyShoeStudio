@@ -14,7 +14,7 @@ namespace MyShoeStudio.Controllers
         {
             _context = context;
         }
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         [HttpPost("addProduct")]
         public async Task<IActionResult> AddProduct([FromBody] CreateProduct product)
         {
