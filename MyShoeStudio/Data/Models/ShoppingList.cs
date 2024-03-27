@@ -11,4 +11,5 @@
         // Navigation properties
         public virtual User? User { get; set; }
         public virtual ICollection<Product_ShoppingList>? ProductPaths { get; set; }
+    }
 }
