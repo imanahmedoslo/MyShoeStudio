@@ -24,7 +24,7 @@ if (builder.Environment.IsProduction())
 
 
 // Add services to the container.
-var connectionString = Environment.GetEnvironmentVariable("_DEFAULTCONNECTION_");
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings:_DEFAULTCONNECTION_");
 if (builder.Environment.IsDevelopment())
 {
     // Use SQL Server for Development
