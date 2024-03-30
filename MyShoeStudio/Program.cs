@@ -24,15 +24,17 @@ if (builder.Environment.IsProduction())
 
 
 // Add services to the container.
-var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings:_DEFAULTCONNECTION_");
+//var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings:_DEFAULTCONNECTION_");
 if (builder.Environment.IsDevelopment())
 {
+    var connectionString = Environment.GetEnvironmentVariable("_DEFAULTCONNECTION_");
     // Use SQL Server for Development
     builder.Services.AddDbContext<MyShoeStudioDbContext>(options =>
         options.UseSqlServer(connectionString));
 }
 else if (builder.Environment.IsProduction())
 {
+    var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings:_DEFAULTCONNECTION_");
     // Use PostgreSQL for Production
     builder.Services.AddDbContext<MyShoeStudioDbContext>(options =>
         options.UseNpgsql(connectionString));
