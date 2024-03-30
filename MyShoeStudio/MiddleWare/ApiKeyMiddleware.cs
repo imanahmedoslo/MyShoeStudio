@@ -21,7 +21,7 @@
                 return;
             }
 
-            var apiKey = _configuration.GetValue<string>("ApiKey");
+            var apiKey = Environment.GetEnvironmentVariable("_X_API_KEY_");
             if (!apiKey.Equals(receivedApiKey))
             {
                 context.Response.StatusCode = 401; // Unauthorized
