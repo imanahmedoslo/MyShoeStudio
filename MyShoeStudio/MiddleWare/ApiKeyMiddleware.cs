@@ -2,7 +2,7 @@
 {
     public class ApiKeyMiddleware
     {
-        private const string ApiKeyHeaderName = "X-API-Key";
+        private const string ApiKeyHeaderName = "_X_API_KEY_";
         private readonly RequestDelegate _next;
         private readonly IConfiguration _configuration;
 
