@@ -40,7 +40,7 @@ namespace MyShoeStudio.Controllers
                 // Add more claims as needed
             };
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["_JWT_KEY_"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -48,8 +48,8 @@ namespace MyShoeStudio.Controllers
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddMinutes(120),
                 SigningCredentials = credentials,
-                Issuer = _config["Jwt:Issuer"],
-                Audience = _config["Jwt:Issuer"],
+                Issuer = _config["_JWT_ISSUER"],
+                Audience = _config["_JWT_ISSUER"],
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
