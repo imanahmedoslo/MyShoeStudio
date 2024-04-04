@@ -6,7 +6,7 @@
         public int TotalPrice { get; set; }
         public DateTime Date { get; set; }
         public bool IsPurchased { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         // Navigation properties
         public virtual User? User { get; set; }

@@ -14,8 +14,26 @@ var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
 var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
 
 // Add services to the container.
+<<<<<<< Updated upstream
 builder.Services.AddDbContext<MyShoeStudioDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+=======
+//var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings:_DEFAULTCONNECTION_");
+if (builder.Environment.IsDevelopment())
+{
+    var connectionString = Environment.GetEnvironmentVariable("_DEFAULTCONNECTION_");
+    // Use SQL Server for Development
+    builder.Services.AddDbContext<MyShoeStudioDbContext>(options =>
+        options.UseSqlServer(connectionString));
+}
+else if (builder.Environment.IsProduction())
+{
+    var connectionString = Environment.GetEnvironmentVariable("_DEFAULTCONNECTION_");
+    // Use PostgreSQL for Production
+    builder.Services.AddDbContext<MyShoeStudioDbContext>(options =>
+        options.UseNpgsql(connectionString));
+}
+>>>>>>> Stashed changes
 
 // Adding Identity
 builder.Services.AddIdentity<User, IdentityRole>(options => {
