@@ -163,7 +163,7 @@ public class CreateShoppingList
     public int TotalPrice { get; set; }
     public DateTime Date { get; set; }
     public bool IsPurchased { get; set; }
-    public int UserId { get; set; }
+    public string UserId { get; set; }
 
 }
 public class CreateProduct_ShoppingList

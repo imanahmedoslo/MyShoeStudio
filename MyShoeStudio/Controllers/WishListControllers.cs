@@ -40,7 +40,7 @@ namespace MyShoeStudio.Controllers
             {
                 return BadRequest(ModelState);
             }
-            Wishlist? wishListToDelete = await _context.Wishlists.FirstOrDefaultAsync(x => x.UserId ==Id);
+            Wishlist? wishListToDelete = await _context.Wishlists.FirstOrDefaultAsync(x => x.Id ==Id);
             if (wishListToDelete == null)
             {
                 return NotFound(new { message = "Wish list not found" });
@@ -72,7 +72,7 @@ namespace MyShoeStudio.Controllers
             {
                 return BadRequest(ModelState);
             }
-            Wishlist? wishListToAddProduct = await _context.Wishlists.FirstOrDefaultAsync(x => x.UserId == id);
+            Wishlist? wishListToAddProduct = await _context.Wishlists.FirstOrDefaultAsync(x => x.Id == id);
             if (wishListToAddProduct == null)
             {
                 return NotFound(new { message = "Wish list not found" });
@@ -93,7 +93,7 @@ namespace MyShoeStudio.Controllers
             {
                 return BadRequest(ModelState);
             }
-            Wishlist? wishListToRemoveProduct = await _context.Wishlists.FirstOrDefaultAsync(x => x.UserId == form.wishListId);
+            Wishlist? wishListToRemoveProduct = await _context.Wishlists.FirstOrDefaultAsync(x => x.Id == form.wishListId);
             if (wishListToRemoveProduct == null)
             {
                 return NotFound(new { message = "Wish list not found" });
@@ -129,7 +129,7 @@ namespace MyShoeStudio.Controllers
 public class CreateWishList
 {
     public int ProductId { get; set; }
-    public int UserId { get; set; }
+    public string UserId { get; set; }
     public int TotalPrice { get; set; }
     public string ListName { get; set; }=string.Empty;
 }

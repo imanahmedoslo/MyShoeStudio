@@ -34,7 +34,7 @@ if (builder.Environment.IsDevelopment())
 }
 else if (builder.Environment.IsProduction())
 {
-    var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings:_DEFAULTCONNECTION_");
+    var connectionString = Environment.GetEnvironmentVariable("_DEFAULTCONNECTION_");
     // Use PostgreSQL for Production
     builder.Services.AddDbContext<MyShoeStudioDbContext>(options =>
         options.UseNpgsql(connectionString));
