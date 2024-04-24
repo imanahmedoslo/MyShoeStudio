@@ -86,7 +86,7 @@ builder.Services.AddCors(options =>
     {
         options.AddPolicy("ProdCorsPolicy", policyBuilder =>
         {
-            policyBuilder.WithOrigins(corsSettings?.AllowedOrigins.ToArray() ?? new string[] { "https://my-style-studio.vercel.app/" })
+            policyBuilder.WithOrigins(corsSettings?.AllowedOrigins.ToArray() ?? new string[] { "https://my-style-studio.vercel.app/",  })
                          .AllowAnyMethod()
                          .AllowAnyHeader();
         });

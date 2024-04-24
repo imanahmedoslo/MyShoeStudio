@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  myshoestudio:
+    image: ${DOCKER_REGISTRY-}myshoestudio
+    build:
+      context: .
+      dockerfile: MyShoeStudio\Dockerfile
